@@ -1,0 +1,25 @@
+name: heroku-caderneta-user
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Maven CLI for GitHub Actions with JDK 8, 11, and 13
+      uses: guillonapa/gh-action-maven-cli@v2.0.1
+      with:
+        lifecycle: 'clean package test'
+    - name: Build with Maven
+      run: mvn package
+    - name: Deploy to Heroku
+      uses: AkhileshNS/heroku-deploy@v3.8.8
+      with:
+        heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+        heroku_email: ${{secrets.HEROKU_EMAIL}}
+        heroku_app_name: ${{secrets.HEROKU_APP}}
