@@ -13,18 +13,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.caderneta.handler.StandardError;
 import com.caderneta.model.dto.LoginDTO;
 import com.caderneta.model.dto.UserDTO;
 import com.caderneta.service.IUserService;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequestMapping(value = "/v1/user")
-@ApiResponses(value = { @ApiResponse(code = 500, message = "Internal Server Error", response = StandardError.class) })
 public class UserController {
 	
 	@Autowired
@@ -33,7 +29,7 @@ public class UserController {
 	@PostMapping
 	@ResponseBody
 	@ResponseStatus(value = HttpStatus.OK)
-	@ApiOperation(value = "Create User", tags = {"Gestão User"})
+	@Operation(summary = "Create User")
 	public void create(@Valid @RequestBody UserDTO dto) {		
 		service.create(dto);
 	}
@@ -48,7 +44,7 @@ public class UserController {
 	@ResponseBody
 	@GetMapping(value = "/by-email")
 	@ResponseStatus(value = HttpStatus.OK)
-	@ApiOperation(value = "Find User", tags = {"Gestão User"})
+	@Operation(summary = "Find User")
 	public UserDTO findByEmail(@RequestParam(value = "email") String email) {
 		return service.findUserByEmail(email);
 	}

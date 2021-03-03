@@ -1,17 +1,14 @@
 package com.caderneta.kafka.config;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.kafka.annotation.EnableKafka;
-
-@EnableKafka
-@Configuration
+//@EnableKafka
+//@Configuration
 public class UserConsumerConfig {
 
 //	@Value(value = "${kafka.bootstrapAddress}")
 //    private String bootstrapAddress;
-	
+//	
 //	private static final String GROUP_ID = "caderneta_user";
-
+//
 //    @Bean
 //    public ConcurrentKafkaListenerContainerFactory<String, UserDTO> userListenerContainerFactory() {
 //        ConcurrentKafkaListenerContainerFactory<String, UserDTO> factory = new ConcurrentKafkaListenerContainerFactory<>();

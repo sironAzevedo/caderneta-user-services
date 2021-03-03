@@ -1,6 +1,6 @@
 server:
-  #port: 8002
-  port: ${PORT:0}
+  port: 8002
+#  port: ${PORT:0}
 
 spring:
   application:    name: caderneta-user
@@ -12,9 +12,13 @@ eureka:
     service-url:
       #defaultZone: http://caderneta-eureka-server:8761/eureka #Esta url aponta para o container docker
       defaultZone: ${URL_EUREKA_SERVER:http://localhost:8761/eureka}
-  instance:
-    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+#  instance:
+#    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
 
 feign:
     hystrix:
         enabled: true
+
+springdoc:
+  swagger-ui:
+    path=: /swagger-ui.html
