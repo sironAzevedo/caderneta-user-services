@@ -29,7 +29,7 @@ import com.caderneta.util.UserCreate;
 @SpringBootTest
 class UserServiceImplTest {
 	
-	@Autowired(required=true)
+	@Autowired
 	private IUserService service;
 	
 	@MockBean
@@ -40,7 +40,6 @@ class UserServiceImplTest {
 	@BeforeEach
 	void setUp() {
 		user = UserCreate.createUser();
-//		user.setId(1000L);
 	}
 
 	@Test
