@@ -19,7 +19,6 @@ import com.caderneta.model.dto.UserDTO;
 
 @EnableKafka
 @Configuration
-@Profile(value = {"!test", "!heroku"})
 public class UserConsumerConfig {
 
 	@Value(value = "${kafka.bootstrapAddress}")
@@ -28,6 +27,7 @@ public class UserConsumerConfig {
 	private static final String GROUP_ID = "caderneta_user";
 
     @Bean
+    @Profile("docker")
     public ConcurrentKafkaListenerContainerFactory<String, UserDTO> userListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, UserDTO> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(userConsumerFactory());

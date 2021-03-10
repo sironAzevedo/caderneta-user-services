@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-@Profile(value = {"!test", "!heroku"})
+@Profile("docker")
 public class UserConsumer {
 
 	@Autowired
