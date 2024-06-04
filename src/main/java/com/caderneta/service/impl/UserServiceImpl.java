@@ -1,5 +1,6 @@
 package com.caderneta.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,10 +13,10 @@ import com.caderneta.repository.IUserRepository;
 import com.caderneta.service.IUserService;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements IUserService {
-	
-	@Autowired
-	private IUserRepository repo;
+
+	private final IUserRepository repo;
 	
 	@Override
 	public void create(UserDTO dto) {

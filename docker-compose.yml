@@ -1,0 +1,21 @@
+version: "3.9"
+services:
+
+  db-caderneta:
+    image: postgres:12-alpine
+    restart: always
+    container_name: db-caderneta
+    environment:
+      - DATABASE_HOST=127.0.0.1
+      - POSTGRES_USER=caderneta
+      - POSTGRES_PASSWORD=caderneta
+      - POSTGRES_DB=db_caderneta_user
+    networks:
+      - automacao-net
+    ports:
+      - "5433:5432"
+
+networks:
+  automacao-net:
+    external:
+      name: automacao-resgate-fatura_automacao-net
