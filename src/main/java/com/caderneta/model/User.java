@@ -8,7 +8,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Setter
@@ -30,33 +30,39 @@ public class User implements Serializable {
 	private Long id;
 
 	@NotNull
-	@Column(name = "NAME")
+	@Column(name = "NAME", nullable = false)
 	private String name;
 
 	@NotNull
-	@Column(name = "EMAIL")
+	@Column(name = "EMAIL", nullable = false)
 	private String email;
 
 	@NotNull
-	@Column(name = "PWD")
+	@Column(name = "PWD", nullable = false)
 	private String password;
 
 	@Enumerated(EnumType.STRING)
+	@Column(name = "STATUS", nullable = false)
     private UserStatusEnum status;
 
 	@CreatedDate
 	@Temporal(TemporalType.DATE)
 	@Column(name = "DT_CADASTRO", updatable = false)
-	private Date createdAt;
+	private LocalDate createdAt;
 
 	@LastModifiedDate
 	@Column(name = "DT_UPDATE")
 	@Temporal(TemporalType.DATE)
-	private Date updatedAt;
+	private LocalDate updatedAt;
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE })
 	@JoinTable(name = "TB_USER_ROLE", joinColumns = @JoinColumn(name = "ID_USER", referencedColumnName = "ID"),
 			inverseJoinColumns = @JoinColumn(name = "ID_ROLE", referencedColumnName = "ID"))
 	private List<Role> roles;
+
+	@PrePersist
+	public void prePersist() {
+		createdAt = LocalDate.now();
+	}
 
 }
