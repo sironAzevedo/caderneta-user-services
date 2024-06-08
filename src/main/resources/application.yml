@@ -1,53 +1,21 @@
 server:
-  port: 8002
-#  port: ${PORT:0}
+  port: ${PORT:8080}
 
 spring:
   application:
-    name: caderneta-user
-  datasource:
-    url: ${DATABASE_URL:jdbc:postgresql://localhost:5433/db_caderneta_user}
-    driver-class-name: org.postgresql.Driver
-    initialization-mode: never
-    tomcat:
-      test-while-idle: true
-      validation-query: SELECT 1
+    name: user-services
   jpa:
     show-sql: true
-    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
     open-in-view: false
-    hibernate:
-      ddl-auto: none
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
       hibernate:
         format_sql: true
-        default_schema: ${DATABASE_SCHEMA:public}
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        jdbc:
-          lob:
-            non_contextual_creation: true
-          temp:
-            use_jdbc_metadata_defaults: false
-
+        temp:
+          use_jdbc_metadata_defaults: false
 database:
+  url: ${DATABASE_URL:jdbc:postgresql://localhost:5433/db_caderneta_user}
+  driver-class-name: org.postgresql.Driver
   user: ${DATABASE_USER:caderneta}
   pass: ${DATABASE_PASS:caderneta}
-
-#  zipkin:
-#    base-url: ${URL_ZIPKIN:http://localhost:9411/}
-      
-#eureka:
-#  client:
-#    service-url:
-      #defaultZone: http://caderneta-eureka-server:8761/eureka #Esta url aponta para o container docker
-#      defaultZone: ${URL_EUREKA_SERVER:http://localhost:8761/eureka}
-#  instance:
-#    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
-
-feign:
-    hystrix:
-        enabled: true
-
-springdoc:
-  swagger-ui:
-    path=: /swagger-ui.html
+  default_schema: ${DATABASE_SCHEMA:public}
