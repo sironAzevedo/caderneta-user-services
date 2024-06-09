@@ -1,11 +1,0 @@
-spring:
-  application:
-    name: caderneta-user
-  profiles:
-    active: ${ENVIRONMENT:test}
-  cloud:
-    config:
-      #uri: http://netflix-config-server:8888 #Esta url estar apontando para o container docker
-      uri: ${URL_CONFIG_SERVER:http://localhost:8888}
-
-management:  endpoints:    web:      exposure:        include: '*'

@@ -1,152 +1,110 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.3.5.RELEASE</version>
-		<relativePath /> <!-- lookup parent from repository -->
+		<version>3.2.6</version>
+		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
-	<groupId>com.caderneta</groupId>
-	<artifactId>caderneta-user-services</artifactId>
+	<groupId>br.com.user</groupId>
+	<artifactId>user-services</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>caderneta-user-services</name>
-	<description>Microservico Caderneta User</description>
+	<name>user-services</name>
+	<description>Microservico para gerenciar Usuarios</description>
 
 	<properties>
-		<java.version>11</java.version>
-		<org.mapstruct.version>1.4.1.Final</org.mapstruct.version>
-		<org.lombok.version>1.18.16</org.lombok.version>
-		<spring-cloud.version>Hoxton.SR9</spring-cloud.version>
-		<springdoc-openapi-ui.version>1.5.5</springdoc-openapi-ui.version>
+		<java.version>17</java.version>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
+		<org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
+		<org.lombok.version>1.18.22</org.lombok.version>
+		<spring-cloud.version>2023.0.1</spring-cloud.version>
+		<springdoc-openapi-ui.version>1.6.7</springdoc-openapi-ui.version>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
+			<artifactId>spring-boot-starter</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.hibernate.validator</groupId>
-			<artifactId>hibernate-validator</artifactId>
-		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+
 		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-config</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
 		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
+
 		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-sleuth</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
+
 		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-zipkin</artifactId>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-crypto</artifactId>
+			<version>6.3.0</version>
 		</dependency>
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<scope>runtime</scope>
-		</dependency>
+
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>org.junit.vintage</groupId>
-					<artifactId>junit-vintage-engine</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.flywaydb</groupId>
-			<artifactId>flyway-core</artifactId>
-		</dependency>
+
 		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
 			<version>${org.mapstruct.version}</version>
 		</dependency>
+
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok-mapstruct-binding</artifactId>
 			<version>0.2.0</version>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-openfeign</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.kafka</groupId>
-			<artifactId>spring-kafka</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>
-				spring-cloud-starter-netflix-hystrix
-			</artifactId>
-		</dependency>
 
 		<!-- SWAGGER -->
 		<dependency>
 			<groupId>org.springdoc</groupId>
-			<artifactId>springdoc-openapi-ui</artifactId>
-			<version>${springdoc-openapi-ui.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springdoc</groupId>
-			<artifactId>springdoc-openapi-data-rest</artifactId>
-			<version>${springdoc-openapi-ui.version}</version>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.5.0</version>
 		</dependency>
 		<!-- SWAGGER -->
+
+		<!-- PostgreSQL Driver -->
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>runtime</scope>
+		</dependency>
 
 		<!-- OWASP -->
 		<dependency>
 			<groupId>com.googlecode.owasp-java-html-sanitizer</groupId>
 			<artifactId>owasp-java-html-sanitizer</artifactId>
-			<version>20190610.1</version>
+			<version>20240325.1</version>
 		</dependency>
+
 		<dependency>
 			<groupId>org.jsoup</groupId>
 			<artifactId>jsoup</artifactId>
-			<version>1.12.1</version>
+			<version>1.17.2</version>
 		</dependency>
 		<!-- OWASP -->
+
 	</dependencies>
 
 	<build>
@@ -154,36 +112,13 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<jvmArguments>-Dspring.application.admin.enabled=true</jvmArguments>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
-				</configuration>
-				<executions>
-					<execution>
-						<id>pre-integration-test</id>
-						<goals>
-							<goal>start</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>post-integration-test</id>
-						<goals>
-							<goal>stop</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<source>11</source>
-					<target>11</target>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
 					<annotationProcessorPaths>
 						<path>
 							<groupId>org.projectlombok</groupId>
@@ -198,51 +133,7 @@
 					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.jacoco</groupId>
-				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.5</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>prepare-agent</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>report</id>
-						<phase>prepare-package</phase>
-						<goals>
-							<goal>report</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.springdoc</groupId>
-				<artifactId>springdoc-openapi-maven-plugin</artifactId>
-				<version>1.1</version>
-				<executions>
-					<execution>
-						<id>integration-test</id>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 	</build>
-
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-dependencies</artifactId>
-				<version>${spring-cloud.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
 
 </project>
