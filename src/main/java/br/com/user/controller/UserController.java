@@ -25,12 +25,12 @@ public class UserController {
 	}
 	
 	@ResponseBody
-	@PostMapping("/login")
+	@GetMapping("/login")
 	@ResponseStatus(value = HttpStatus.OK)
-	public void login(@Valid @RequestBody LoginDTO dto) {
-		service.login(dto);
+	public UserDTO login(@RequestParam(value = "email") String email) {
+		return service.login(email);
 	}
-	
+
 	@ResponseBody
 	@GetMapping(value = "/by-email")
 	@ResponseStatus(value = HttpStatus.OK)

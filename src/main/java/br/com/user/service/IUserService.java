@@ -6,8 +6,8 @@ import br.com.user.model.dto.UserDTO;
 public interface IUserService {
 
 	void create(UserDTO dto);
-	
-	void login(LoginDTO dto);
+
+	UserDTO login(final String email);
 
 	UserDTO findByEmail(final String email);
 }

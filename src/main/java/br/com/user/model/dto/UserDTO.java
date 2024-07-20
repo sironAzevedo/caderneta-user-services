@@ -1,5 +1,6 @@
 package br.com.user.model.dto;
 
+import br.com.user.model.enums.PerfilEnum;
 import br.com.user.model.enums.UserStatusEnum;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.Email;
@@ -10,6 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Setter
 @Getter
@@ -32,6 +34,8 @@ public class UserDTO implements Serializable {
 	private String password;
 
 	private UserStatusEnum status;
+
+	private List<PerfilEnum> perfis;
 
 	public UserDTO() {
 		super();

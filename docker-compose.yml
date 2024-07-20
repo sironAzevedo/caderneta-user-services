@@ -18,10 +18,11 @@ services:
 
   user-services:
     container_name: user-services
-    image: user-services:latest
-    build:
-      context: .
-      dockerfile: ./Dockerfile
+    image: sirondba/user-services:latest
+#    image: user-services:latest
+#    build: #Para criar a a imagem docker localmente comentar a linha 21 e descomentar as linhas 22, 23, 24 e 24
+#      context: .
+#      dockerfile: ./Dockerfile
     networks:
       - automacao-net
     ports:

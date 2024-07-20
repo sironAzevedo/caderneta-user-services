@@ -45,11 +45,7 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	public void login(LoginDTO dto) {
-		UserDTO user = this.findByEmail(dto.getEmail());
-		
-		if(!user.getPassword().equals(dto.getPassword())) {
-			throw new UserException("Email e/ou senha estão incorretos");
-		}
+	public UserDTO login(String email) {
+		return repo.findByEmail(email).map(UserMapper.INSTANCE::toDTOLogin).orElseThrow(() -> new UserException("Usuario não encontrado"));
 	}
 }

@@ -1,4 +1,4 @@
-name: caderneta-user
+name: user service
 
 on:
   push:
