@@ -18,7 +18,7 @@ public interface UserMapper {
 	UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
 	@Mapping(target="password", ignore = true)
-	@Mapping(target="perfis", ignore = true)
+	@Mapping(target="perfis", expression = "java(resolvePerfis(entity.getRoles()))")
 	UserDTO toDTO(User entity);
 
 	@Mapping(target="perfis", expression = "java(resolvePerfis(entity.getRoles()))")
