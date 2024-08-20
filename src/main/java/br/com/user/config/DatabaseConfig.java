@@ -1,6 +1,6 @@
 package br.com.user.config;
 
-import br.com.user.handler.exception.InternalErrorException;
+import com.br.azevedo.exception.InternalErrorException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;

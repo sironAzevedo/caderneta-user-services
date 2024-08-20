@@ -14,8 +14,18 @@ spring:
         temp:
           use_jdbc_metadata_defaults: false
 database:
-  url: ${DATABASE_URL:jdbc:postgresql://localhost:5433/db_caderneta_user}
+  url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/usuario_db}
   driver-class-name: org.postgresql.Driver
-  user: ${DATABASE_USER:caderneta}
-  pass: ${DATABASE_PASS:caderneta}
+  user: ${DATABASE_USER:fatura_user}
+  pass: ${DATABASE_PASS:fatura_user}
   default_schema: ${DATABASE_SCHEMA:public}
+
+message:
+  baseName: message
+
+security:
+  enabled: ${SECURITY_ENABLE:false}
+  secret:
+    vault:
+      role-id: ${VAULT_ROLE_ID:1234}
+      secret-id: ${VAULT_SECRET_ID:1234}

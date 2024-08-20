@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS TB_USER
     NAME         VARCHAR (256) NOT NULL,
     EMAIL        VARCHAR (256) NOT NULL,
     PWD          VARCHAR (550) NOT NULL,
-    STATUS	     DOMINIO_STATUS NULL DEFAULT 'ACTIVE',
+    STATUS	     VARCHAR (50)  NOT NULL DEFAULT 'ACTIVE',
     DT_CADASTRO  DATE DEFAULT NOW(),
     DT_UPDATE DATE,
     UNIQUE(EMAIL)
@@ -29,9 +29,11 @@ CREATE TABLE IF NOT EXISTS TB_USER_ROLE
 
 -- INSERT
 
-INSERT INTO TB_ROLE VALUES ('ROLE_ADMIN');
-INSERT INTO TB_ROLE VALUES ('ROLE_USER');
+INSERT INTO public.tb_role VALUES ('ROLE_ADMIN');
+INSERT INTO public.tb_role VALUES ('ROLE_USER');
+INSERT INTO public.tb_role VALUES ('ROLE_APPLICATION');
 
-INSERT INTO TB_USER (NAME, EMAIL, PWD) VALUES ('Siron Silva', 'sirondba@gmail.com', '$2a$10$vlUpoD3T8/mIaCbE5hDNeOJM1Vrbv8KqHDNPgpoqNUZ9CmeSVPTUm');
+INSERT INTO public.tb_user (NAME, EMAIL, PWD) VALUES ('Siron Silva', 'sirondba@gmail.com', '$2a$10$vlUpoD3T8/mIaCbE5hDNeOJM1Vrbv8KqHDNPgpoqNUZ9CmeSVPTUm');
+INSERT INTO public.tb_user_role  VALUES ((select id from TB_USER u where u.email = 'sirondba@gmail.com'), 'ROLE_ADMIN');
 
-INSERT INTO tb_user_role  VALUES ((select id from TB_USER u where u.email = 'sirondba@gmail.com'), 'ROLE_ADMIN');
+
