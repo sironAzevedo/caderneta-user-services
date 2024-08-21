@@ -27,5 +27,6 @@ security:
   enabled: ${SECURITY_ENABLE:false}
   secret:
     vault:
+      endpoint: ${VAULT_ENDPOINT:http://127.0.0.1:8200}
       role-id: ${VAULT_ROLE_ID:1234}
       secret-id: ${VAULT_SECRET_ID:1234}
