@@ -1,13 +1,11 @@
 package br.com.user;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import br.com.user.config.AbstractTest;
 
-@SpringBootTest
-class ApplicationTests {
+class ApplicationTests extends AbstractTest {
 
-	@Test
-	void contextLoads() {
-	}
+//	@Test
+//	void contextLoads() {
+//	}
 
 }

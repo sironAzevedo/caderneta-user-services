@@ -1,5 +1,6 @@
 package br.com.user.model;
 
+import br.com.user.model.enums.UserStatusEnum;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -40,9 +41,9 @@ public class User implements Serializable {
 	@Column(name = "PWD", nullable = false)
 	private String password;
 
-/*	@Enumerated(EnumType.STRING)
+	@Enumerated(EnumType.STRING)
 	@Column(name = "STATUS", columnDefinition = "dominio_status")
-    private UserStatusEnum status;*/
+    private UserStatusEnum status;
 
 	@CreatedDate
 	@Temporal(TemporalType.DATE)

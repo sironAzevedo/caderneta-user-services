@@ -1,13 +1,15 @@
 package br.com.user.controller;
 
-import br.com.user.model.dto.LoginDTO;
 import br.com.user.model.dto.UserDTO;
 import br.com.user.service.IUserService;
+import com.br.azevedo.security.user.ValidationUser;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,10 +34,19 @@ public class UserController {
 	}
 
 	@ResponseBody
-	@GetMapping(value = "/by-email")
+	@ValidationUser
+	@GetMapping("/{email}")
 	@ResponseStatus(value = HttpStatus.OK)
 	@Operation(summary = "Find User")
-	public UserDTO findByEmail(@RequestParam(value = "email") String email) {
+	public UserDTO findByEmail(@PathVariable("email") String email) {
 		return service.findByEmail(email);
+	}
+
+	@ResponseBody
+	@GetMapping
+	@ResponseStatus(value = HttpStatus.OK)
+	@Operation(summary = "Find All User")
+	public List<UserDTO> findAll() {
+		return service.findAll();
 	}
 }
