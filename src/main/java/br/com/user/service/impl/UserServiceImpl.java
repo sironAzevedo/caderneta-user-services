@@ -11,11 +11,14 @@ import br.com.user.repository.IUserRepository;
 import br.com.user.service.IUserService;
 import com.br.azevedo.exception.UserException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements IUserService {
@@ -28,6 +31,7 @@ public class UserServiceImpl implements IUserService {
 	public void create(UserDTO dto) {
 		
 		if (repo.existsByEmail(dto.getEmail())) {
+			log.error("Este e-mail [{}] já existe", dto.getEmail());
 			throw new UserException("Este e-mail já existe");
 		}
 		
@@ -40,6 +44,7 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
+	@Cacheable(value = "user_services_cliente_por_email", key = "#email", unless="#result == null")
 	public UserDTO findByEmail(String email) {
 		return repo.findByEmail(email).map(UserMapper.INSTANCE::toDTO).orElseThrow(() -> new UserException("Usuario não encontrado"));
 	}
@@ -50,7 +55,9 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
+	@Cacheable(value = "user_services_cliente_login_email", key = "#email", unless="#result == null")
 	public UserDTO login(String email) {
+		log.info("Consultando o email {}", email);
 		return repo.findByEmail(email).map(UserMapper.INSTANCE::toDTOLogin).orElseThrow(() -> new UserException("Usuario não encontrado"));
 	}
 }
