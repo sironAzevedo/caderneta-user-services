@@ -2,6 +2,7 @@ package br.com.user.controller;
 
 import br.com.user.model.dto.UserDTO;
 import br.com.user.service.IUserService;
+import com.br.azevedo.infra.log.method.MethodLoggable;
 import com.br.azevedo.security.user.ValidationUser;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -17,15 +18,17 @@ import java.util.List;
 public class UserController {
 
 	private final IUserService service;
-	
+
 	@PostMapping
 	@ResponseBody
+	@MethodLoggable
 	@ResponseStatus(value = HttpStatus.OK)
 	@Operation(summary = "Create User")
 	public void create(@Valid @RequestBody UserDTO dto) {
 		service.create(dto);
 	}
-	
+
+	@MethodLoggable
 	@ResponseBody
 	@GetMapping("/login")
 	@ResponseStatus(value = HttpStatus.OK)
@@ -35,6 +38,7 @@ public class UserController {
 
 	@ResponseBody
 	@ValidationUser
+	@MethodLoggable
 	@GetMapping("/{email}")
 	@ResponseStatus(value = HttpStatus.OK)
 	@Operation(summary = "Find User")
@@ -42,8 +46,9 @@ public class UserController {
 		return service.findByEmail(email);
 	}
 
-	@ResponseBody
 	@GetMapping
+	@ResponseBody
+	@MethodLoggable
 	@ResponseStatus(value = HttpStatus.OK)
 	@Operation(summary = "Find All User")
 	public List<UserDTO> findAll() {
