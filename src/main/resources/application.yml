@@ -35,17 +35,13 @@ security:
 
 cache:
   redis:
-    config:
-      host: ${REDIS_HOST:localhost}
-      port: ${REDIS_PORT:6379}
-      database: ${REDIS_DATABASE:0}
-      password: ${REDIS_PASSWORD:599E72B4E2ED1023E6EE0842668117E704F5A912B09369F1AD300147E2CA895C}
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+    database: ${REDIS_DATABASE:0}
+    password: ${REDIS_PASSWORD:599E72B4E2ED1023E6EE0842668117E704F5A912B09369F1AD300147E2CA895C}
   caches[0]:
     cacheName: user_services_cliente_por_email
     expiration: ${CACHE_DURATION_CONSULTA_PESSOA_EMAIL:PT24H}
   caches[1]:
     cacheName: user_services_cliente_login_email
     expiration: ${CACHE_DURATION_CONSULTA_LOGIN_EMAIL:PT24H}
-#    caches[2]:
-#      cacheName: account-transfer:dadosContaPorSaldo
-#      expiration: ${CACHE_DURATION_DADOS_CONTA:PT1H}
