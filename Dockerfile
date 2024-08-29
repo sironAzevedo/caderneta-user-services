@@ -13,14 +13,14 @@ COPY src /workspace/src
 # Compila o projeto e gera o JAR
 RUN mvn -B -f pom.xml clean package -DskipTests
 
-# Etapa 2: Criação da imagem final
-FROM --platform=$TARGETPLATFORM openjdk:17
+# Etapa 2: Criação da imagem final com suporte multi-arquitetura
+FROM --platform=$TARGETPLATFORM eclipse-temurin:17-jdk
 
 # Copia o JAR gerado para o contêiner final
 COPY --from=build /workspace/target/*.jar /workspace/app.jar
 
 # Expõe a porta para a aplicação
-# EXPOSE 8002
+#EXPOSE 8002
 
 # Comando de entrada para iniciar a aplicação
 ENTRYPOINT ["java","-jar","/workspace/app.jar"]
