@@ -13,7 +13,7 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableCache
 @EnableSecurity(publicPaths = ".*/v1/user")
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class, RedisRepositoriesAutoConfiguration.class})
-@ComponentScan(basePackages = {"br.com.user", "com.br.azevedo"})
+@ComponentScan(basePackages = {"br.com", "com.br.azevedo"})
 public class Application {
 
 	public static void main(String[] args) {
