@@ -11,7 +11,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @EnableI18N
 @EnableCache
-@EnableSecurity(publicPaths = ".*/v1/user")
+@EnableSecurity
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class, RedisRepositoriesAutoConfiguration.class})
 @ComponentScan(basePackages = {"br.com", "com.br.azevedo"})
 public class Application {
