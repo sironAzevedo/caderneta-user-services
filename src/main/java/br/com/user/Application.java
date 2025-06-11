@@ -1,6 +1,7 @@
 package br.com.user;
 
 import com.br.azevedo.infra.cache.EnableCache;
+import com.br.azevedo.security.EnableCors;
 import com.br.azevedo.security.EnableSecurity;
 import com.br.azevedo.utils.mensagemUtils.EnableI18N;
 import org.springframework.boot.SpringApplication;
@@ -9,6 +10,7 @@ import org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoCo
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 
+@EnableCors
 @EnableI18N
 @EnableCache
 @EnableSecurity
