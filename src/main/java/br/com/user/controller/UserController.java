@@ -57,11 +57,11 @@ public class UserController {
 	@ResponseBody
 	@ValidationUser
 	@MethodLoggable
-	@GetMapping("/{id}")
+	@GetMapping("/code/{id}")
 	@ResponseStatus(value = HttpStatus.OK)
 	@Operation(summary = "Find User ID")
-	public UserDTO findById(@PathVariable("id") String email) {
-		return service.findByEmail(email);
+	public UserDTO findById(@PathVariable("id") Long id) {
+		return service.findById(id);
 	}
 
 	@GetMapping
