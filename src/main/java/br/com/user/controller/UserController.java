@@ -49,8 +49,18 @@ public class UserController {
 	@MethodLoggable
 	@GetMapping("/{email}")
 	@ResponseStatus(value = HttpStatus.OK)
-	@Operation(summary = "Find User")
+	@Operation(summary = "Find User Email")
 	public UserDTO findByEmail(@PathVariable("email") String email) {
+		return service.findByEmail(email);
+	}
+
+	@ResponseBody
+	@ValidationUser
+	@MethodLoggable
+	@GetMapping("/{id}")
+	@ResponseStatus(value = HttpStatus.OK)
+	@Operation(summary = "Find User ID")
+	public UserDTO findById(@PathVariable("id") String email) {
 		return service.findByEmail(email);
 	}
 

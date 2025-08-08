@@ -13,5 +13,7 @@ public interface IUserService {
 
 	UserDTO findByEmail(final String email);
 
+	UserDTO findById(final Long id);
+
 	List<UserDTO> findAll();
 }

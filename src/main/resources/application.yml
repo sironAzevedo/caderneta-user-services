@@ -46,3 +46,5 @@ cache:
         expiration: ${CACHE_DURATION_CONSULTA_PESSOA_EMAIL:PT72H}
       - cacheName: user_services_cliente_login_email
         expiration: ${CACHE_DURATION_CONSULTA_LOGIN_EMAIL:PT72H}
+      - cacheName: user_services_cliente_por_id
+        expiration: ${CACHE_DURATION_CONSULTA_LOGIN_EMAIL:PT168H}
