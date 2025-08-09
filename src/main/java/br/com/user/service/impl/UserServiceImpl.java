@@ -46,18 +46,32 @@ public class UserServiceImpl implements IUserService {
 	@Override
 	@Cacheable(value = "user_services_cliente_por_email", key = "#email", unless="#result == null")
 	public UserDTO findByEmail(String email) {
-		return repo.findByEmail(email).map(UserMapper.INSTANCE::toDTO).orElseThrow(() -> new UserException("Usuario não encontrado"));
+		return repo.findByEmail(email)
+				.map(UserMapper.INSTANCE::toDTO)
+				.orElseThrow(() -> new UserException("Usuario não encontrado"));
+	}
+
+	@Override
+	@Cacheable(value = "user_services_cliente_por_id", key = "#id", unless="#result == null")
+	public UserDTO findById(final Long id) {
+		return repo.findById(id)
+				.map(UserMapper.INSTANCE::toDTO)
+				.orElseThrow(() -> new UserException("Usuario não encontrado"));
 	}
 
 	@Override
 	public List<UserDTO> findAll() {
-		return repo.findAll().stream().map(UserMapper.INSTANCE::toDTO).toList();
+		return repo.findAll()
+				.stream().map(UserMapper.INSTANCE::toDTO)
+				.toList();
 	}
 
 	@Override
 	@Cacheable(value = "user_services_cliente_login_email", key = "#email", unless="#result == null")
 	public UserDTO login(String email) {
 		log.info("Consultando o email {}", email);
-		return repo.findByEmail(email).map(UserMapper.INSTANCE::toDTOLogin).orElseThrow(() -> new UserException("Usuario não encontrado"));
+		return repo.findByEmail(email)
+				.map(UserMapper.INSTANCE::toDTOLogin)
+				.orElseThrow(() -> new UserException("Usuario não encontrado"));
 	}
 }
