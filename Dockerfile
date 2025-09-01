@@ -10,8 +10,12 @@ COPY settings.xml /root/.m2/settings.xml
 COPY pom.xml /workspace
 COPY src /workspace/src
 
-# Compila o projeto e gera o JAR
-RUN mvn -B -f pom.xml clean package -DskipTests
+# Monta o GITHUB_TOKEN como um secret e executa o build do Maven
+# O secret fica disponível em /run/secrets/GITHUB_TOKEN
+RUN --mount=type=secret,id=GITHUB_TOKEN \
+    mkdir -p /root/.m2 && \
+    echo "<settings><servers><server><id>github</id><username>dummy</username><password>$(cat /run/secrets/GITHUB_TOKEN)</password></server></servers></settings>" > /root/.m2/settings.xml && \
+    mvn -B -f pom.xml clean package -DskipTests
 
 # Etapa 2: Criação da imagem final com suporte multi-arquitetura
 FROM --platform=$TARGETPLATFORM eclipse-temurin:17-jdk
