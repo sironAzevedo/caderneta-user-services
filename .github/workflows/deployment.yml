@@ -87,9 +87,9 @@ jobs:
       - name: Execute deploy
         uses: appleboy/ssh-action@v1
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
           script: |
             # 1. Executa o seu script de deploy como antes
             VERSION=${{ needs.build_and_publish.outputs.APP_VERSION }}
