@@ -1,0 +1,83 @@
+{
+  "nameAPP": "user-services",
+  "port": "8080",
+  "configContainer": {
+    "cpus": "1.0",
+    "memory": "800m",
+    "memorySwap": "1G"
+  },
+  "environment": [
+    {
+      "name": "SPRING_PROFILES_ACTIVE",
+      "value": "prod"
+    },
+    {
+      "name": "DATABASE_URL",
+      "value": "jdbc:postgresql://ep-small-tree-ac8b34y7-pooler.sa-east-1.aws.neon.tech:5432/neondb"
+    },
+    {
+      "name": "DATABASE_USER",
+      "value": "SECRET::DATABASE_USER"
+    },
+    {
+      "name": "DATABASE_PASS",
+      "value": "SECRET::DATABASE_PASS"
+    },
+    {
+      "name": "SECURITY_ENABLE",
+      "value": "true"
+    },
+    {
+      "name": "VAULT_ENDPOINT",
+      "value": "http://vault:8200"
+    },
+    {
+      "name": "API_CLIENTE_URL",
+      "value": "http://user-services:8080/v1/user"
+    },
+    {
+      "name": "API_AUTH_URL",
+      "value": "http://auth-api:3000"
+    },
+    {
+      "name": "VAULT_ROLE_ID",
+      "value": "SECRET::VAULT_ROLE_ID"
+    },
+    {
+      "name": "VAULT_SECRET_ID",
+      "value": "SECRET::VAULT_SECRET_ID"
+    },
+    {
+      "name": "PORT",
+      "value": "8080"
+    },
+    {
+      "name": "REDIS_HOST",
+      "value": "redis-server"
+    },
+    {
+      "name": "REDIS_PORT",
+      "value": "6379"
+    },
+    {
+      "name": "REDIS_PASSWORD",
+      "value": "SECRET::REDIS_PASSWORD"
+    },
+    {
+      "name": "SHOW_SQL",
+      "value": "false"
+    },
+    {
+      "name": "CACHE_DURATION_CONSULTA_PESSOA_EMAIL",
+      "value": "PT72H"
+    },
+    {
+      "name": "CACHE_DURATION_CONSULTA_LOGIN_EMAIL",
+      "value": "PT72H"
+    },
+    {
+      "name": "APP_SCOPES",
+      "value": "users"
+    }
+  ]
+}
