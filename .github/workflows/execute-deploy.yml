@@ -110,7 +110,7 @@ jobs:
           echo "<settings><servers><server><id>github</id><username>\${env.GITHUB_ACTOR}</username><password>\${env.GITHUB_TOKEN}</password></server></servers></settings>" > ~/.m2/settings.xml
         env:
           GITHUB_ACTOR: ${{ github.actor }}
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.github-token }}
 
       - name: Cache Maven dependencies
         uses: actions/cache@v3
@@ -123,7 +123,7 @@ jobs:
       - name: Package with Maven
         run: mvn clean package -DskipTests
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.github-token }}
 
       - name: Verify JAR file
         run: |
@@ -201,10 +201,7 @@ jobs:
             
             echo "Conteúdo do arquivo .env:"
             awk -F= '{print $1 "=***"}' "$ENV_FILE"
-            
-            echo "⬇️ Pull da nova imagem: $IMAGE_NAME"
-            docker pull "$IMAGE_NAME"
-            
+                        
             echo "🚀 Parar e remover contêiner antigo (se existir)"
             if [ "$(docker ps -q -f name=^/${APP_NAME}$)" ]; then
                 docker stop "$APP_NAME"
