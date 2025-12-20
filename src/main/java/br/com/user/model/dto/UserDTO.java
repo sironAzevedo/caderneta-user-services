@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.ObjectUtils;
 
 import java.io.Serializable;
 import java.util.List;
@@ -37,8 +38,13 @@ public class UserDTO implements Serializable {
 
 	private List<PerfilEnum> perfis;
 
+	private String photo;
+
+	private String photoUploaded;
+
+	private Boolean photoUpdate;
+
 	public UserDTO() {
 		super();
 	}
-
 }
