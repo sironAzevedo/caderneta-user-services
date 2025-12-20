@@ -34,6 +34,16 @@ security:
       secret-id: ${VAULT_SECRET_ID:54f73290-2dda-5a66-821a-dca8fa00e977}
   scopes: ${APP_SCOPES:users}
 
+cloud:
+  aws:
+    credentials:
+      access-key: ${AWS_ACCESS_KEY:}
+      secret-key: ${AWS_SECRET_KEY:}
+    region:
+      static: sa-east-1
+    s3:
+      bucket: ${AWS_BUCKET_NAME:caderneta-service}
+
 cache:
   redis:
     config:

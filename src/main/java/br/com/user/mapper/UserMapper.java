@@ -9,7 +9,6 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Mapper
@@ -19,6 +18,7 @@ public interface UserMapper {
 
 	@Mapping(target="password", ignore = true)
 	@Mapping(target="perfis", expression = "java(resolvePerfis(entity.getRoles()))")
+	@Mapping(target="photoUpdate", ignore = true)
 	UserDTO toDTO(User entity);
 
 	@Mapping(target="perfis", expression = "java(resolvePerfis(entity.getRoles()))")

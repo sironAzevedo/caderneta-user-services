@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -72,5 +73,15 @@ public class UserController {
 	@Operation(summary = "Find All User")
 	public List<UserDTO> findAll() {
 		return service.findAll();
+	}
+
+	@ResponseBody
+	@ValidationUser
+	@MethodLoggable
+	@PatchMapping("/{email}")
+	@ResponseStatus(value = HttpStatus.OK)
+	@Operation(summary = "Update User (name and password only)")
+	public UserDTO patchUpdate(@PathVariable("email") String email, @RequestBody UserDTO dto) {
+		return service.update(email, dto);
 	}
 }

@@ -60,6 +60,10 @@ public class User implements Serializable {
 			inverseJoinColumns = @JoinColumn(name = "ID_ROLE", referencedColumnName = "ID"))
 	private List<Role> roles;
 
+	@NotNull
+	@Column(name = "PHOTO")
+	private String photo;
+
 	@PrePersist
 	public void prePersist() {
 		createdAt = LocalDate.now();
