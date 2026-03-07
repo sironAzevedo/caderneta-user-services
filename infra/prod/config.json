@@ -13,7 +13,7 @@
     },
     {
       "name": "DATABASE_URL",
-      "value": "jdbc:postgresql://ep-small-tree-ac8b34y7-pooler.sa-east-1.aws.neon.tech:5432/neondb"
+      "value": "jdbc:postgresql://usuario_db:5432/x_u01"
     },
     {
       "name": "DATABASE_USER",
