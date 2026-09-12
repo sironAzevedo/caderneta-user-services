@@ -3,7 +3,7 @@ package br.com.user.controller;
 import br.com.user.model.dto.UserDTO;
 import br.com.user.service.IUserService;
 import com.br.azevedo.infra.log.method.MethodLoggable;
-import com.br.azevedo.security.user.ValidationUser;
+import com.br.azevedo.security.EnableSecurity;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
 
@@ -32,12 +33,12 @@ public class UserController {
 	@MethodLoggable
 	@ResponseStatus(value = HttpStatus.OK)
 	@Operation(summary = "Create User")
+	@EnableSecurity(publicMethods = {RequestMethod.POST})
 	public void create(@Valid @RequestBody UserDTO dto) {
 		service.create(dto);
 	}
 
 	@ResponseBody
-	@ValidationUser
 	@MethodLoggable
 	@GetMapping("/login/{email}")
 	@ResponseStatus(value = HttpStatus.OK)
@@ -46,7 +47,6 @@ public class UserController {
 	}
 
 	@ResponseBody
-	@ValidationUser
 	@MethodLoggable
 	@GetMapping("/{email}")
 	@ResponseStatus(value = HttpStatus.OK)
@@ -56,7 +56,6 @@ public class UserController {
 	}
 
 	@ResponseBody
-	@ValidationUser
 	@MethodLoggable
 	@GetMapping("/code/{id}")
 	@ResponseStatus(value = HttpStatus.OK)
@@ -67,7 +66,6 @@ public class UserController {
 
 	@GetMapping
 	@ResponseBody
-	@ValidationUser
 	@MethodLoggable
 	@ResponseStatus(value = HttpStatus.OK)
 	@Operation(summary = "Find All User")
@@ -76,7 +74,6 @@ public class UserController {
 	}
 
 	@ResponseBody
-	@ValidationUser
 	@MethodLoggable
 	@PatchMapping("/{email}")
 	@ResponseStatus(value = HttpStatus.OK)
