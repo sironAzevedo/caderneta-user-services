@@ -5,7 +5,7 @@ spring:
   application:
     name: user-services
   jpa:
-    show-sql: true
+    show-sql: ${SHOW_SQL:false}
     open-in-view: false
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
@@ -30,8 +30,8 @@ security:
   secret:
     vault:
       endpoint: ${VAULT_ENDPOINT:http://127.0.0.1:8200}
-      role-id: ${VAULT_ROLE_ID:84872589-3e16-853b-f530-5054f3f4c549}
-      secret-id: ${VAULT_SECRET_ID:54f73290-2dda-5a66-821a-dca8fa00e977}
+      role-id: ${VAULT_ROLE_ID}
+      secret-id: ${VAULT_SECRET_ID}
   scopes: ${APP_SCOPES:users}
 
 cloud:
