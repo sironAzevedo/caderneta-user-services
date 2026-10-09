@@ -22,6 +22,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -30,6 +31,7 @@ import static br.com.user.communs.Constantes.*;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class UserServiceImpl implements IUserService {
 
@@ -48,11 +50,46 @@ public class UserServiceImpl implements IUserService {
 		
 		User user = UserMapper.INSTANCE.toEntity(dto);
 		user.setPassword(passwordEncoder.encode(dto.getPassword()));
+		user.setProvider("LOCAL");
 		List<Role> roles = roleRepository.findByName(PerfilEnum.ROLE_USER);
 		user.setRoles(roles);
 		user.setStatus(UserStatusEnum.ACTIVE);
 		user.setPhoto(PHOTO_DEFAULT);
 		repo.save(user);
+	}
+
+	@Override
+	@Caching(evict = {
+			@CacheEvict(value = "user_services_cliente_por_id", key = "#result.id", condition = "#result != null"),
+			@CacheEvict(value = "user_services_cliente_por_email", key = "#result.email", condition = "#result != null"),
+			@CacheEvict(value = "user_services_cliente_login_email", key = "#result.email", condition = "#result != null")
+	})
+	public UserDTO createOrUpdateGoogleUser(UserDTO dto) {
+		return repo.findByEmail(dto.getEmail())
+				.map(existingUser -> {
+					if (StringUtils.isBlank(existingUser.getProvider()) || "LOCAL".equals(existingUser.getProvider())) {
+						existingUser.setProvider("GOOGLE");
+						existingUser.setProviderId(dto.getProviderId());
+					}
+					if (StringUtils.isNotBlank(dto.getPhoto()) && PHOTO_DEFAULT.equals(existingUser.getPhoto())) {
+						existingUser.setPhoto(dto.getPhoto());
+					}
+					existingUser.setUpdatedAt(LocalDate.now());
+					User updated = repo.save(existingUser);
+					return UserMapper.INSTANCE.toDTO(updated);
+				})
+				.orElseGet(() -> {
+					User newUser = UserMapper.INSTANCE.toEntity(dto);
+					newUser.setPassword(null);
+					newUser.setProvider("GOOGLE");
+					newUser.setProviderId(dto.getProviderId());
+					newUser.setStatus(UserStatusEnum.ACTIVE);
+					newUser.setPhoto(StringUtils.defaultIfBlank(dto.getPhoto(), PHOTO_DEFAULT));
+					List<Role> roles = roleRepository.findByName(PerfilEnum.ROLE_USER);
+					newUser.setRoles(roles);
+					User saved = repo.save(newUser);
+					return UserMapper.INSTANCE.toDTO(saved);
+				});
 	}
 
 	@Override

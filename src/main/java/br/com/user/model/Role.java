@@ -23,6 +23,8 @@ public class Role implements Serializable {
     @Enumerated(EnumType.STRING)
     private PerfilEnum name;
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToMany(mappedBy = "roles")
     private List<User> users;
 }
