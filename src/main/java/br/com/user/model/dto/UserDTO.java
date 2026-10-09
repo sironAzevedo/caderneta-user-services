@@ -31,8 +31,11 @@ public class UserDTO implements Serializable {
     @NotEmpty
 	private String email;
 
-	@NotEmpty
 	private String password;
+
+	private String provider;
+
+	private String providerId;
 
 	private UserStatusEnum status;
 
@@ -43,6 +46,8 @@ public class UserDTO implements Serializable {
 	private String photoUploaded;
 
 	private Boolean photoUpdate;
+
+	private Boolean termsAgreed;
 
 	public UserDTO() {
 		super();

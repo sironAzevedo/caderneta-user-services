@@ -37,9 +37,14 @@ public class User implements Serializable {
 	@Column(name = "EMAIL", nullable = false)
 	private String email;
 
-	@NotNull
-	@Column(name = "PWD", nullable = false)
+	@Column(name = "PWD", nullable = true)
 	private String password;
+
+	@Column(name = "PROVIDER")
+	private String provider;
+
+	@Column(name = "PROVIDER_ID")
+	private String providerId;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "STATUS", columnDefinition = "dominio_status")
@@ -55,6 +60,8 @@ public class User implements Serializable {
 	@Temporal(TemporalType.DATE)
 	private LocalDate updatedAt;
 
+	@ToString.Exclude
+	@EqualsAndHashCode.Exclude
 	@ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE })
 	@JoinTable(name = "TB_USER_ROLE", joinColumns = @JoinColumn(name = "ID_USER", referencedColumnName = "ID"),
 			inverseJoinColumns = @JoinColumn(name = "ID_ROLE", referencedColumnName = "ID"))
@@ -63,6 +70,9 @@ public class User implements Serializable {
 	@NotNull
 	@Column(name = "PHOTO")
 	private String photo;
+
+	@Column(name = "TERMS_AGREED")
+	private Boolean termsAgreed;
 
 	@PrePersist
 	public void prePersist() {
