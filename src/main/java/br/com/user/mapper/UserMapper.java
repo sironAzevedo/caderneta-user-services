@@ -4,33 +4,72 @@ import br.com.user.model.Role;
 import br.com.user.model.User;
 import br.com.user.model.dto.UserDTO;
 import br.com.user.model.enums.PerfilEnum;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
-import org.mapstruct.factory.Mappers;
+import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 
-@Mapper
-public interface UserMapper {
-	
-	UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
+@Component
+public class UserMapper {
 
-	@Mapping(target="password", ignore = true)
-	@Mapping(target="perfis", expression = "java(resolvePerfis(entity.getRoles()))")
-	@Mapping(target="photoUpdate", ignore = true)
-	UserDTO toDTO(User entity);
+    public static final UserMapper INSTANCE = new UserMapper();
 
-	@Mapping(target="perfis", expression = "java(resolvePerfis(entity.getRoles()))")
-	UserDTO toDTOLogin(User entity);
-	
-	@Mappings({
-	      @Mapping(target="name", source="dto.name"),
-	      @Mapping(target="email", source="dto.email")
-	    })
-	User toEntity(UserDTO dto);
+    public UserDTO toDTO(User entity) {
+        if (entity == null) {
+            return null;
+        }
+        UserDTO dto = new UserDTO();
+        dto.setId(entity.getId());
+        dto.setName(entity.getName());
+        dto.setEmail(entity.getEmail());
+        dto.setProvider(entity.getProvider());
+        dto.setProviderId(entity.getProviderId());
+        dto.setStatus(entity.getStatus());
+        dto.setPhoto(entity.getPhoto());
+        dto.setTermsAgreed(entity.getTermsAgreed());
+        dto.setPerfis(resolvePerfis(entity.getRoles()));
+        return dto;
+    }
 
-	default List<PerfilEnum> resolvePerfis(final List<Role> roles) {
-		return roles.stream().map(Role::getName).toList();
-	}
+    public UserDTO toDTOLogin(User entity) {
+        if (entity == null) {
+            return null;
+        }
+        UserDTO dto = new UserDTO();
+        dto.setId(entity.getId());
+        dto.setName(entity.getName());
+        dto.setEmail(entity.getEmail());
+        dto.setPassword(entity.getPassword());
+        dto.setProvider(entity.getProvider());
+        dto.setProviderId(entity.getProviderId());
+        dto.setStatus(entity.getStatus());
+        dto.setPhoto(entity.getPhoto());
+        dto.setTermsAgreed(entity.getTermsAgreed());
+        dto.setPerfis(resolvePerfis(entity.getRoles()));
+        return dto;
+    }
+
+    public User toEntity(UserDTO dto) {
+        if (dto == null) {
+            return null;
+        }
+        return User.builder()
+                .id(dto.getId())
+                .name(dto.getName())
+                .email(dto.getEmail())
+                .password(dto.getPassword())
+                .provider(dto.getProvider())
+                .providerId(dto.getProviderId())
+                .status(dto.getStatus())
+                .photo(dto.getPhoto())
+                .termsAgreed(dto.getTermsAgreed())
+                .build();
+    }
+
+    public List<PerfilEnum> resolvePerfis(final List<Role> roles) {
+        if (roles == null) {
+            return Collections.emptyList();
+        }
+        return roles.stream().map(Role::getName).toList();
+    }
 }

@@ -11,7 +11,7 @@
 
 	<groupId>br.com.user</groupId>
 	<artifactId>user-services</artifactId>
-	<version>1.0.27</version>
+	<version>1.0.30</version>
 	<name>user-services</name>
 	<description>Microservico para gerenciar Usuarios</description>
 
@@ -20,7 +20,7 @@
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
 		<org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
-		<org.lombok.version>1.18.22</org.lombok.version>
+		<org.lombok.version>1.18.32</org.lombok.version>
 		<spring-cloud.version>2023.0.1</spring-cloud.version>
 		<spring-cloud-aws>3.1.0</spring-cloud-aws>
 		<springdoc-openapi-ui.version>1.6.7</springdoc-openapi-ui.version>
@@ -194,6 +194,11 @@
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
 							<version>${org.lombok.version}</version>
+						</path>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok-mapstruct-binding</artifactId>
+							<version>0.2.0</version>
 						</path>
 						<path>
 							<groupId>org.mapstruct</groupId>

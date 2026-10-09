@@ -16,6 +16,8 @@ public interface IUserService {
 
 	UserDTO findById(final Long id);
 
+	UserDTO createOrUpdateGoogleUser(UserDTO dto);
+
 	List<UserDTO> findAll();
 
 }

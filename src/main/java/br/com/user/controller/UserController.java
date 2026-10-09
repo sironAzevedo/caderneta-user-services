@@ -38,6 +38,16 @@ public class UserController {
 		service.create(dto);
 	}
 
+	@PostMapping("/google")
+	@ResponseBody
+	@MethodLoggable
+	@ResponseStatus(value = HttpStatus.OK)
+	@Operation(summary = "Create or Update Google User")
+	@EnableSecurity(publicMethods = {RequestMethod.POST})
+	public UserDTO googleAuth(@RequestBody UserDTO dto) {
+		return service.createOrUpdateGoogleUser(dto);
+	}
+
 	@ResponseBody
 	@MethodLoggable
 	@GetMapping("/login/{email}")
