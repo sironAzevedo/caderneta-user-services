@@ -47,6 +47,8 @@ public class UserDTO implements Serializable {
 
 	private Boolean photoUpdate;
 
+	private Boolean termsAgreed;
+
 	public UserDTO() {
 		super();
 	}

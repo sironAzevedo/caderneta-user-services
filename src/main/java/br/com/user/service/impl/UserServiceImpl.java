@@ -51,6 +51,7 @@ public class UserServiceImpl implements IUserService {
 		User user = UserMapper.INSTANCE.toEntity(dto);
 		user.setPassword(passwordEncoder.encode(dto.getPassword()));
 		user.setProvider("LOCAL");
+		user.setTermsAgreed(Boolean.TRUE.equals(dto.getTermsAgreed()));
 		List<Role> roles = roleRepository.findByName(PerfilEnum.ROLE_USER);
 		user.setRoles(roles);
 		user.setStatus(UserStatusEnum.ACTIVE);
@@ -74,6 +75,9 @@ public class UserServiceImpl implements IUserService {
 					if (StringUtils.isNotBlank(dto.getPhoto()) && PHOTO_DEFAULT.equals(existingUser.getPhoto())) {
 						existingUser.setPhoto(dto.getPhoto());
 					}
+					if (existingUser.getTermsAgreed() == null || !existingUser.getTermsAgreed()) {
+						existingUser.setTermsAgreed(true);
+					}
 					existingUser.setUpdatedAt(LocalDate.now());
 					User updated = repo.save(existingUser);
 					return UserMapper.INSTANCE.toDTO(updated);
@@ -83,6 +87,7 @@ public class UserServiceImpl implements IUserService {
 					newUser.setPassword(null);
 					newUser.setProvider("GOOGLE");
 					newUser.setProviderId(dto.getProviderId());
+					newUser.setTermsAgreed(true);
 					newUser.setStatus(UserStatusEnum.ACTIVE);
 					newUser.setPhoto(StringUtils.defaultIfBlank(dto.getPhoto(), PHOTO_DEFAULT));
 					List<Role> roles = roleRepository.findByName(PerfilEnum.ROLE_USER);

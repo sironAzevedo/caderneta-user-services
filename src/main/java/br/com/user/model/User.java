@@ -71,6 +71,9 @@ public class User implements Serializable {
 	@Column(name = "PHOTO")
 	private String photo;
 
+	@Column(name = "TERMS_AGREED")
+	private Boolean termsAgreed;
+
 	@PrePersist
 	public void prePersist() {
 		createdAt = LocalDate.now();

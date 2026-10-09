@@ -26,6 +26,7 @@ public class UserMapper {
         dto.setProviderId(entity.getProviderId());
         dto.setStatus(entity.getStatus());
         dto.setPhoto(entity.getPhoto());
+        dto.setTermsAgreed(entity.getTermsAgreed());
         dto.setPerfis(resolvePerfis(entity.getRoles()));
         return dto;
     }
@@ -43,6 +44,7 @@ public class UserMapper {
         dto.setProviderId(entity.getProviderId());
         dto.setStatus(entity.getStatus());
         dto.setPhoto(entity.getPhoto());
+        dto.setTermsAgreed(entity.getTermsAgreed());
         dto.setPerfis(resolvePerfis(entity.getRoles()));
         return dto;
     }
@@ -60,6 +62,7 @@ public class UserMapper {
                 .providerId(dto.getProviderId())
                 .status(dto.getStatus())
                 .photo(dto.getPhoto())
+                .termsAgreed(dto.getTermsAgreed())
                 .build();
     }
 
