@@ -1,6 +1,6 @@
 package br.com.user.model;
 
-import br.com.user.model.enums.UserStatusEnum;
+import com.br.azevedo.model.enums.UserStatusEnum;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;

@@ -14,7 +14,6 @@ spring:
         temp:
           use_jdbc_metadata_defaults: false
 
-
 database:
   url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/usuario_db}
   driver-class-name: org.postgresql.Driver
@@ -27,22 +26,18 @@ message:
 
 security:
   enabled: ${SECURITY_ENABLE:true}
-  secret:
-    vault:
-      endpoint: ${VAULT_ENDPOINT:http://127.0.0.1:8200}
-      role-id: ${VAULT_ROLE_ID}
-      secret-id: ${VAULT_SECRET_ID}
   scopes: ${APP_SCOPES:users}
 
 cloud:
   aws:
+    services: s3, s3presigner
     credentials:
       access-key: ${AWS_ACCESS_KEY:}
       secret-key: ${AWS_SECRET_KEY:}
     region:
-      static: sa-east-1
+      static: us-east-1
     s3:
-      bucket: ${AWS_BUCKET_NAME:caderneta-service}
+      bucket: ${AWS_BUCKET_NAME:caderneta-service-image}
 
 cache:
   redis:
