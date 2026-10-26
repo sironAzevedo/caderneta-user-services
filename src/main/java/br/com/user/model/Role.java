@@ -1,6 +1,6 @@
 package br.com.user.model;
 
-import br.com.user.model.enums.PerfilEnum;
+import com.br.azevedo.model.enums.PerfilEnum;
 import jakarta.persistence.*;
 import lombok.*;
 

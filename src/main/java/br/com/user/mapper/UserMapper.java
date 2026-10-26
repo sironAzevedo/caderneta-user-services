@@ -2,8 +2,8 @@ package br.com.user.mapper;
 
 import br.com.user.model.Role;
 import br.com.user.model.User;
-import br.com.user.model.dto.UserDTO;
-import br.com.user.model.enums.PerfilEnum;
+import com.br.azevedo.model.dto.UserDTO;
+import com.br.azevedo.model.enums.PerfilEnum;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
