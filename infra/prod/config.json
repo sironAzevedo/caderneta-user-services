@@ -40,14 +40,6 @@
       "value": "http://auth-api:3000"
     },
     {
-      "name": "VAULT_ROLE_ID",
-      "value": "SECRET::VAULT_ROLE_ID"
-    },
-    {
-      "name": "VAULT_SECRET_ID",
-      "value": "SECRET::VAULT_SECRET_ID"
-    },
-    {
       "name": "PORT",
       "value": "8080"
     },
