@@ -11,7 +11,7 @@
 
 	<groupId>br.com.user</groupId>
 	<artifactId>user-services</artifactId>
-	<version>1.0.31</version>
+	<version>1.0.33</version>
 	<name>user-services</name>
 	<description>Microservico para gerenciar Usuarios</description>
 
@@ -110,7 +110,7 @@
 		<dependency>
 			<groupId>com.br.azevedo</groupId>
 			<artifactId>commons-utils</artifactId>
-			<version>1.0.25102026072122</version>
+			<version>1.0.27102026011818</version>
 <!--			<version>1.0-SNAPSHOT</version>-->
 		</dependency>
 
