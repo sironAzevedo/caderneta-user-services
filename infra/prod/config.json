@@ -28,10 +28,6 @@
       "value": "true"
     },
     {
-      "name": "VAULT_ENDPOINT",
-      "value": "http://vault:8200"
-    },
-    {
       "name": "API_CLIENTE_URL",
       "value": "http://user-services:8080/v1/user"
     },
@@ -70,6 +66,14 @@
     {
       "name": "APP_SCOPES",
       "value": "users"
+    },
+    {
+      "name": "AWS_ACCESS_KEY",
+      "value": "SECRET::AWS_ACCESS_KEY"
+    },
+    {
+      "name": "AWS_SECRET_KEY",
+      "value": "SECRET::AWS_SECRET_KEY"
     }
   ]
 }
