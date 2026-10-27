@@ -37,7 +37,7 @@ cloud:
     region:
       static: us-east-1
     s3:
-      bucket: ${AWS_BUCKET_NAME:caderneta-service-image}
+      bucket: ${AWS_BUCKET_NAME:caderneta-service-image-prod}
 
 cache:
   redis:
