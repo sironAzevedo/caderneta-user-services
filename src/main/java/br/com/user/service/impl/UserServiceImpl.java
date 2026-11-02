@@ -12,6 +12,7 @@ import br.com.user.service.IUserService;
 import com.br.azevedo.exception.UserException;
 import com.br.azevedo.model.dto.UserDTO;
 import com.br.azevedo.model.enums.PerfilEnum;
+import com.br.azevedo.model.enums.SistemaEnum;
 import com.br.azevedo.model.enums.UserStatusEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +26,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import static br.com.user.communs.Constantes.*;
 
@@ -41,13 +46,33 @@ public class UserServiceImpl implements IUserService {
 	private final CloudStorageProvider cloudStorageProvider;
 	
 	@Override
+	@Caching(evict = {
+			@CacheEvict(value = "user_services_cliente_por_email", key = "#dto.email", condition = "#dto != null"),
+			@CacheEvict(value = "user_services_cliente_login_email", key = "#dto.email", condition = "#dto != null")
+	})
 	public void create(UserDTO dto) {
-		
+		Set<SistemaEnum> requestedSistemas = resolveSistemas(dto);
+
 		if (repo.existsByEmail(dto.getEmail())) {
+			Optional<User> existingUserOpt = repo.findByEmail(dto.getEmail());
+			if (existingUserOpt.isPresent()) {
+				User existingUser = existingUserOpt.get();
+				boolean alreadyHasAllSystems = existingUser.getSistemas() != null && existingUser.getSistemas().containsAll(requestedSistemas);
+				if (!alreadyHasAllSystems) {
+					if (existingUser.getSistemas() == null) {
+						existingUser.setSistemas(new HashSet<>());
+					}
+					existingUser.getSistemas().addAll(requestedSistemas);
+					existingUser.setUpdatedAt(LocalDate.now());
+					repo.save(existingUser);
+					log.info("Usuário [{}] vinculado com sucesso ao(s) novo(s) sistema(s): {}", dto.getEmail(), requestedSistemas);
+					return;
+				}
+			}
 			log.error("Este e-mail [{}] já existe", dto.getEmail());
 			throw new UserException("Este e-mail já existe");
 		}
-		
+
 		User user = UserMapper.INSTANCE.toEntity(dto);
 		user.setPassword(passwordEncoder.encode(dto.getPassword()));
 		user.setProvider("LOCAL");
@@ -56,6 +81,7 @@ public class UserServiceImpl implements IUserService {
 		user.setRoles(roles);
 		user.setStatus(UserStatusEnum.ACTIVE);
 		user.setPhoto(PHOTO_DEFAULT);
+		user.setSistemas(requestedSistemas);
 		repo.save(user);
 	}
 
@@ -66,6 +92,8 @@ public class UserServiceImpl implements IUserService {
 			@CacheEvict(value = "user_services_cliente_login_email", key = "#result.email", condition = "#result != null")
 	})
 	public UserDTO createOrUpdateGoogleUser(UserDTO dto) {
+		Set<SistemaEnum> requestedSistemas = resolveSistemas(dto);
+
 		return repo.findByEmail(dto.getEmail())
 				.map(existingUser -> {
 					if (StringUtils.isBlank(existingUser.getProvider()) || "LOCAL".equals(existingUser.getProvider())) {
@@ -78,6 +106,10 @@ public class UserServiceImpl implements IUserService {
 					if (existingUser.getTermsAgreed() == null || !existingUser.getTermsAgreed()) {
 						existingUser.setTermsAgreed(true);
 					}
+					if (existingUser.getSistemas() == null) {
+						existingUser.setSistemas(new HashSet<>());
+					}
+					existingUser.getSistemas().addAll(requestedSistemas);
 					existingUser.setUpdatedAt(LocalDate.now());
 					User updated = repo.save(existingUser);
 					return UserMapper.INSTANCE.toDTO(updated);
@@ -92,9 +124,17 @@ public class UserServiceImpl implements IUserService {
 					newUser.setPhoto(StringUtils.defaultIfBlank(dto.getPhoto(), PHOTO_DEFAULT));
 					List<Role> roles = roleRepository.findByName(PerfilEnum.ROLE_USER);
 					newUser.setRoles(roles);
+					newUser.setSistemas(requestedSistemas);
 					User saved = repo.save(newUser);
 					return UserMapper.INSTANCE.toDTO(saved);
 				});
+	}
+
+	private Set<SistemaEnum> resolveSistemas(UserDTO dto) {
+		if (dto != null && dto.getSistemas() != null && !dto.getSistemas().isEmpty()) {
+			return new HashSet<>(dto.getSistemas());
+		}
+		return new HashSet<>(Collections.singleton(SistemaEnum.CADERNETA));
 	}
 
 	@Override

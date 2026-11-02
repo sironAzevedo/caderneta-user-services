@@ -1,5 +1,6 @@
 package br.com.user.model;
 
+import com.br.azevedo.model.enums.SistemaEnum;
 import com.br.azevedo.model.enums.UserStatusEnum;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -9,7 +10,9 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -66,6 +69,13 @@ public class User implements Serializable {
 	@JoinTable(name = "TB_USER_ROLE", joinColumns = @JoinColumn(name = "ID_USER", referencedColumnName = "ID"),
 			inverseJoinColumns = @JoinColumn(name = "ID_ROLE", referencedColumnName = "ID"))
 	private List<Role> roles;
+
+	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name = "TB_USER_SYSTEM", joinColumns = @JoinColumn(name = "ID_USER"))
+	@Column(name = "SISTEMA")
+	@Enumerated(EnumType.STRING)
+	@Builder.Default
+	private Set<SistemaEnum> sistemas = new HashSet<>();
 
 	@NotNull
 	@Column(name = "PHOTO")

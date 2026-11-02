@@ -28,6 +28,7 @@ public class UserMapper {
         dto.setPhoto(entity.getPhoto());
         dto.setTermsAgreed(entity.getTermsAgreed());
         dto.setPerfis(resolvePerfis(entity.getRoles()));
+        dto.setSistemas(entity.getSistemas());
         return dto;
     }
 
@@ -46,6 +47,7 @@ public class UserMapper {
         dto.setPhoto(entity.getPhoto());
         dto.setTermsAgreed(entity.getTermsAgreed());
         dto.setPerfis(resolvePerfis(entity.getRoles()));
+        dto.setSistemas(entity.getSistemas());
         return dto;
     }
 
@@ -63,6 +65,7 @@ public class UserMapper {
                 .status(dto.getStatus())
                 .photo(dto.getPhoto())
                 .termsAgreed(dto.getTermsAgreed())
+                .sistemas(dto.getSistemas() != null ? dto.getSistemas() : new java.util.HashSet<>())
                 .build();
     }
 

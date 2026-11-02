@@ -85,6 +85,30 @@ class UserServiceImplTest {
     }
 
     @Test
+    @DisplayName("Deve vincular novo sistema ao usuário existente quando ainda não possuir o sistema")
+    void shouldEnrollNewSystemWhenUserAlreadyExistsForAnotherSystem() {
+        UserDTO dto = new UserDTO();
+        dto.setEmail("existente@example.com");
+        dto.setSistemas(java.util.Set.of(com.br.azevedo.model.enums.SistemaEnum.MARKETPLACE));
+
+        User existingUser = User.builder()
+                .id(1L)
+                .email("existente@example.com")
+                .sistemas(new java.util.HashSet<>(java.util.Set.of(com.br.azevedo.model.enums.SistemaEnum.CADERNETA)))
+                .build();
+
+        when(userRepository.existsByEmail("existente@example.com")).thenReturn(true);
+        when(userRepository.findByEmail("existente@example.com")).thenReturn(Optional.of(existingUser));
+
+        userService.create(dto);
+
+        verify(userRepository).save(argThat(user ->
+                user.getSistemas().contains(com.br.azevedo.model.enums.SistemaEnum.CADERNETA) &&
+                user.getSistemas().contains(com.br.azevedo.model.enums.SistemaEnum.MARKETPLACE)
+        ));
+    }
+
+    @Test
     @DisplayName("Deve buscar usuário por e-mail e gerar links de avatar")
     void shouldFindUserByEmail() throws MalformedURLException {
         User user = User.builder()
