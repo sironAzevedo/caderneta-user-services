@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.HashSet;
 
 @Component
 public class UserMapper {
@@ -28,7 +29,7 @@ public class UserMapper {
         dto.setPhoto(entity.getPhoto());
         dto.setTermsAgreed(entity.getTermsAgreed());
         dto.setPerfis(resolvePerfis(entity.getRoles()));
-        dto.setSistemas(entity.getSistemas());
+        dto.setSistemas(entity.getSistemas() == null ? null : new HashSet<>(entity.getSistemas()));
         return dto;
     }
 
@@ -47,7 +48,7 @@ public class UserMapper {
         dto.setPhoto(entity.getPhoto());
         dto.setTermsAgreed(entity.getTermsAgreed());
         dto.setPerfis(resolvePerfis(entity.getRoles()));
-        dto.setSistemas(entity.getSistemas());
+        dto.setSistemas(entity.getSistemas() == null ? null : new HashSet<>(entity.getSistemas()));
         return dto;
     }
 

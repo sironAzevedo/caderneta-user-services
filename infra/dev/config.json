@@ -1,6 +1,6 @@
 {
-  "nameAPP": "fatura-services",
-  "port": "8081",
+  "nameAPP": "user-services",
+  "port": "8080",
   "configContainer": {
     "cpus": "1.0",
     "memory": "800m",
@@ -9,19 +9,15 @@
   "environment": [
     {
       "name": "DATABASE_URL",
-      "value": "url"
+      "value": "SECRET::DATABASE_URL"
     },
     {
       "name": "DATABASE_USER",
-      "value": "user"
+      "value": "SECRET::DATABASE_USER"
     },
     {
-      "name": "API_CLIENTE_URL",
-      "value": "url"
-    },
-    {
-      "name": "HOST_QUEUE_SQS",
-      "value": "host"
+      "name": "DATABASE_PASS",
+      "value": "SECRET::DATABASE_PASS"
     }
   ]
 }

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface IRoleRepository extends JpaRepository<Role, String> {
+public interface IRoleRepository extends JpaRepository<Role, PerfilEnum> {
 
     List<Role> findByName(PerfilEnum perfil);
 }

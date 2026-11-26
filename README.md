@@ -43,7 +43,7 @@ Componentes principais:
 - Repository (`br.com.user.repository`): interface JPA para persistência (Postgres).
 - Model (`br.com.user.model`) e DTOs (`br.com.user.model.dto`): entidades e objetos de transferência.
 - Mapper (`br.com.user.mapper`): MapStruct para conversões entre entidades e DTOs.
-- Configurações: `DatabaseConfig`, `ApiConfig`, `application.yml` e `infra/`.
+- Configurações: `@EnableDatabase`, `RedisConfig`, `ApiConfig`, `application.yml` e `infra/`.
 
 Fluxo típico de requisição
 1. Requisição HTTP chega ao `UserController`.
@@ -139,12 +139,13 @@ Configuração (application.yml e variáveis de ambiente)
 As propriedades principais (em `src/main/resources/application.yml`):
 - Server:
   - `server.port` (padrão 8080)
-- Database (chaves usadas pelo `DatabaseConfig`):
+- Banco de dados com HikariCP:
   - `database.url` (ex.: `jdbc:postgresql://localhost:5432/usuario_db`)
   - `database.driver-class-name`
   - `database.user`
   - `database.pass`
-  - `database.default_schema`
+  - `database.default-schema` (variável `DATABASE_SCHEMA`)
+  - `database.pool.minimum-idle` e `database.pool.maximum-pool-size` (padrões 2 e 10)
 - Security:
   - `security.enabled` (controla habilitação de segurança)
   - Configurações de Vault (se usadas) para segredos
@@ -153,12 +154,15 @@ As propriedades principais (em `src/main/resources/application.yml`):
   - `cloud.aws.credentials.secret-key`
   - `cloud.aws.region.static`
   - `cloud.aws.s3.bucket`
+  - `AVATAR_BASE_URL` (opcional, derivada do bucket e da região por padrão)
 - Cache/Redis:
   - `cache.redis.config.host`/`port`/`database`/`password`
-  - `cache.redis.config.caches` — lista com nomes e `expiration`
+  - `cache.redis.caches` — lista com nomes e `expiration`. O TTL da consulta por ID usa `CACHE_DURATION_CONSULTA_PESSOA_ID` (padrão `PT72H`).
 
 Exemplo de variáveis de ambiente (usadas por Docker/composer):
 - DATABASE_URL, DATABASE_USER, DATABASE_PASS, REDIS_HOST, REDIS_PORT, REDIS_PASSWORD, AWS_BUCKET_NAME, PORT, SECURITY_ENABLE
+- O deploy lê `REDIS_PASSWORD` de `APP_SECRETS` em produção. Para o ambiente de desenvolvimento, configure `DATABASE_URL`, `DATABASE_USER` e `DATABASE_PASS` nesse JSON de segredos.
+- Em produção, Swagger fica desabilitado e o container usa `800m` sem swap. Durante a validação do staging, meça a memória dos dois containers em paralelo e confirme a folga da VPS antes da promoção.
 
 Scripts de banco de dados
 ---------
