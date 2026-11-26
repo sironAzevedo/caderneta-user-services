@@ -11,7 +11,7 @@
 
 	<groupId>br.com.user</groupId>
 	<artifactId>user-services</artifactId>
-	<version>1.0.37</version>
+	<version>1.0.38</version>
 	<name>user-services</name>
 	<description>Microservico para gerenciar Usuarios</description>
 
