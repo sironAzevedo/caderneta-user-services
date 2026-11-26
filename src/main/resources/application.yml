@@ -1,5 +1,11 @@
 server:
   port: ${PORT:8080}
+  tomcat:
+    threads:
+      max: 30
+      min-spare: 5
+    max-connections: 100
+    accept-count: 50
 
 spring:
   application:
@@ -10,16 +16,17 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
       hibernate:
-        format_sql: true
+        format_sql: ${FORMAT_SQL:false}
         temp:
           use_jdbc_metadata_defaults: false
 
 database:
+  enabled: true
   url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/usuario_db}
   driver-class-name: org.postgresql.Driver
   user: ${DATABASE_USER:fatura_user}
   pass: ${DATABASE_PASS:fatura_user}
-  default_schema: ${DATABASE_SCHEMA:public}
+  default-schema: ${DATABASE_SCHEMA:public}
 
 message:
   baseName: message
@@ -35,9 +42,18 @@ cloud:
       access-key: ${AWS_ACCESS_KEY:}
       secret-key: ${AWS_SECRET_KEY:}
     region:
-      static: us-east-1
+      static: ${AWS_REGION:us-east-1}
     s3:
       bucket: ${AWS_BUCKET_NAME:caderneta-service-image-prod}
+
+avatar:
+  base-url: ${AVATAR_BASE_URL:https://${cloud.aws.s3.bucket}.s3.${cloud.aws.region.static}.amazonaws.com/}
+
+springdoc:
+  api-docs:
+    enabled: ${SWAGGER_ENABLED:true}
+  swagger-ui:
+    enabled: ${SWAGGER_ENABLED:true}
 
 cache:
   redis:
@@ -45,11 +61,11 @@ cache:
       host: ${REDIS_HOST:localhost}
       port: ${REDIS_PORT:6379}
       database: ${REDIS_DATABASE:0}
-      password: ${REDIS_PASSWORD:599E72B4E2ED1023E6EE0842668117E704F5A912B09369F1AD300147E2CA895C}
+      password: ${REDIS_PASSWORD:}
     caches:
       - cacheName: user_services_cliente_por_email
         expiration: ${CACHE_DURATION_CONSULTA_PESSOA_EMAIL:PT72H}
       - cacheName: user_services_cliente_login_email
         expiration: ${CACHE_DURATION_CONSULTA_LOGIN_EMAIL:PT72H}
       - cacheName: user_services_cliente_por_id
-        expiration: ${CACHE_DURATION_CONSULTA_LOGIN_EMAIL:PT168H}
+        expiration: ${CACHE_DURATION_CONSULTA_PESSOA_ID:PT72H}

@@ -6,6 +6,10 @@ import com.br.azevedo.model.dto.UserDTO;
 import com.br.azevedo.security.EnableSecurity;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import org.apache.commons.lang3.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,12 +23,16 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import org.springframework.web.server.ResponseStatusException;
+
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/v1/user")
 public class UserController {
+
+	private static final int MAX_USER_FIELD_LENGTH = 256;
 
 	private final IUserService service;
 
@@ -44,7 +52,11 @@ public class UserController {
 	@ResponseStatus(value = HttpStatus.OK)
 	@Operation(summary = "Create or Update Google User")
 	@EnableSecurity(publicMethods = {RequestMethod.POST})
-	public UserDTO googleAuth(@RequestBody UserDTO dto) {
+	public UserDTO googleAuth(@Valid @RequestBody UserDTO dto) {
+		if (StringUtils.isBlank(dto.getName()) || dto.getName().length() > MAX_USER_FIELD_LENGTH
+				|| dto.getEmail().length() > MAX_USER_FIELD_LENGTH) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nome ou e-mail inválido");
+		}
 		return service.createOrUpdateGoogleUser(dto);
 	}
 
@@ -88,7 +100,15 @@ public class UserController {
 	@PatchMapping("/{email}")
 	@ResponseStatus(value = HttpStatus.OK)
 	@Operation(summary = "Update User (name and password only)")
-	public UserDTO patchUpdate(@PathVariable("email") String email, @RequestBody UserDTO dto) {
+	public UserDTO patchUpdate(
+			@PathVariable("email") @NotBlank @Email @Size(max = MAX_USER_FIELD_LENGTH) String email,
+			@RequestBody UserDTO dto) {
+		if (StringUtils.length(dto.getName()) > MAX_USER_FIELD_LENGTH) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nome excede o tamanho permitido");
+		}
+		if (StringUtils.isAllBlank(dto.getName(), dto.getPassword(), dto.getPhoto()) && dto.getPhotoUpdate() == null) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Informe um campo para atualizar");
+		}
 		return service.update(email, dto);
 	}
 }

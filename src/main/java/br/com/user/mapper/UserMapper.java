@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.HashSet;
 
 @Component
 public class UserMapper {
@@ -28,24 +29,15 @@ public class UserMapper {
         dto.setPhoto(entity.getPhoto());
         dto.setTermsAgreed(entity.getTermsAgreed());
         dto.setPerfis(resolvePerfis(entity.getRoles()));
+        dto.setSistemas(entity.getSistemas() == null ? null : new HashSet<>(entity.getSistemas()));
         return dto;
     }
 
     public UserDTO toDTOLogin(User entity) {
-        if (entity == null) {
-            return null;
+        UserDTO dto = toDTO(entity);
+        if (dto != null) {
+            dto.setPassword(entity.getPassword());
         }
-        UserDTO dto = new UserDTO();
-        dto.setId(entity.getId());
-        dto.setName(entity.getName());
-        dto.setEmail(entity.getEmail());
-        dto.setPassword(entity.getPassword());
-        dto.setProvider(entity.getProvider());
-        dto.setProviderId(entity.getProviderId());
-        dto.setStatus(entity.getStatus());
-        dto.setPhoto(entity.getPhoto());
-        dto.setTermsAgreed(entity.getTermsAgreed());
-        dto.setPerfis(resolvePerfis(entity.getRoles()));
         return dto;
     }
 
@@ -63,6 +55,7 @@ public class UserMapper {
                 .status(dto.getStatus())
                 .photo(dto.getPhoto())
                 .termsAgreed(dto.getTermsAgreed())
+                .sistemas(dto.getSistemas() != null ? dto.getSistemas() : new java.util.HashSet<>())
                 .build();
     }
 

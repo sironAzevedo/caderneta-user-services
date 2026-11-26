@@ -142,7 +142,8 @@ jobs:
           RESOLVED_JSON=$(echo "$JSON_CONFIG" | jq -c --argjson secrets "$APP_SECRETS" \
             ' .environment |= map(
                 if .value | startswith("SECRET::") then
-                  .value = ($secrets[.value[8:]] // "SECRET_NOT_FOUND")
+                  (.value[8:]) as $key
+                  | .value = ($secrets[$key] | if type == "string" and length > 0 then . else error("Segredo obrigatório ausente: " + $key) end)
                 else
                   .
                 end

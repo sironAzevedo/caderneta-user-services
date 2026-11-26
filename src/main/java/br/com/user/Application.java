@@ -1,7 +1,7 @@
 package br.com.user;
 
 import com.br.azevedo.infra.aws.EnableAws;
-import com.br.azevedo.infra.cache.EnableCache;
+import com.br.azevedo.infra.database.EnableDatabase;
 import com.br.azevedo.security.EnableCors;
 import com.br.azevedo.security.EnableSecurity;
 import com.br.azevedo.utils.mensagemUtils.EnableI18N;
@@ -13,7 +13,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 @EnableAws
 @EnableCors
 @EnableI18N
-@EnableCache
+@EnableDatabase
 @EnableSecurity
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class, RedisRepositoriesAutoConfiguration.class})
 public class Application {

@@ -10,6 +10,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import software.amazon.awssdk.core.exception.SdkException;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.HeadObjectRequest;
+import software.amazon.awssdk.services.s3.model.S3Exception;
 
 import java.net.URL;
 import java.time.Duration;
@@ -20,6 +24,7 @@ import java.time.Duration;
 public class S3CloudStorageProviderImpl implements CloudStorageProvider {
 
     private final AwsS3StorageService awsS3StorageService;
+    private final S3Client s3Client;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
@@ -47,7 +52,25 @@ public class S3CloudStorageProviderImpl implements CloudStorageProvider {
 
     @Override
     public boolean fileExists(String filePath) {
-        return awsS3StorageService.fileExists(bucketName, filePath);
+        return fileExists(filePath, Duration.ofSeconds(15));
+    }
+
+    @Override
+    public boolean fileExists(String filePath, Duration timeout) {
+        var request = HeadObjectRequest.builder()
+                .bucket(bucketName)
+                .key(filePath)
+                .overrideConfiguration(options -> options.apiCallTimeout(timeout))
+                .build();
+        try {
+            s3Client.headObject(request);
+            return true;
+        } catch (SdkException exception) {
+            if (exception instanceof S3Exception s3Error && s3Error.statusCode() == 404) {
+                return false;
+            }
+            throw new FileLookupException(exception);
+        }
     }
 
     @Override
