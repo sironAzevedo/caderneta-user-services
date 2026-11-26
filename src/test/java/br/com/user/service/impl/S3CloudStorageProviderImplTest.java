@@ -2,6 +2,7 @@ package br.com.user.service.impl;
 
 import br.com.user.model.dto.DocumentoLinkInfoDTO;
 import br.com.user.model.dto.FileReference;
+import br.com.user.service.CloudStorageProvider.FileLookupException;
 import com.br.azevedo.infra.aws.s3.AwsS3StorageService;
 import com.br.azevedo.infra.aws.s3.PresignedUrlInfo;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,6 +13,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.HeadObjectRequest;
+import software.amazon.awssdk.services.s3.model.S3Exception;
+import org.mockito.ArgumentCaptor;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -27,6 +32,9 @@ class S3CloudStorageProviderImplTest {
 
     @Mock
     private AwsS3StorageService awsS3StorageService;
+
+    @Mock
+    private S3Client s3Client;
 
     @InjectMocks
     private S3CloudStorageProviderImpl storageProvider;
@@ -76,14 +84,23 @@ class S3CloudStorageProviderImplTest {
     }
 
     @Test
-    @DisplayName("Deve verificar se arquivo existe delegando para AwsS3StorageService")
+    @DisplayName("Deve usar HeadObject com timeout para verificar se o avatar existe")
     void shouldCheckFileExists() {
-        when(awsS3StorageService.fileExists("test-user-bucket", "avatar/avatar123.jpg")).thenReturn(true);
+        assertTrue(storageProvider.fileExists("avatar/avatar123.jpg"));
+        var request = ArgumentCaptor.forClass(HeadObjectRequest.class);
+        verify(s3Client).headObject(request.capture());
+        assertEquals("test-user-bucket", request.getValue().bucket());
+        assertEquals("avatar/avatar123.jpg", request.getValue().key());
+        assertEquals(Duration.ofSeconds(15), request.getValue().overrideConfiguration()
+                .orElseThrow().apiCallTimeout().orElseThrow());
+    }
 
-        boolean exists = storageProvider.fileExists("avatar/avatar123.jpg");
+    @Test
+    void shouldTreatOnly404AsMissingObject() {
+        when(s3Client.headObject(any(HeadObjectRequest.class)))
+                .thenThrow(S3Exception.builder().statusCode(404).build());
 
-        assertTrue(exists);
-        verify(awsS3StorageService).fileExists("test-user-bucket", "avatar/avatar123.jpg");
+        assertFalse(storageProvider.fileExists("avatar/avatar123.jpg"));
     }
 
     @Test
@@ -110,5 +127,13 @@ class S3CloudStorageProviderImplTest {
         assertNotNull(result);
         assertEquals(expiration, result.dataExpiracao());
         assertFalse(result.isExpirate());
+    }
+    @Test
+    void shouldNotTreatS3FailureAsMissingObject() {
+        var failure = S3Exception.builder().statusCode(503).build();
+        when(s3Client.headObject(any(HeadObjectRequest.class))).thenThrow(failure);
+        var error = assertThrows(FileLookupException.class,
+                () -> storageProvider.fileExists("avatar/avatar123.jpg"));
+        assertSame(failure, error.getCause());
     }
 }

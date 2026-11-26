@@ -11,7 +11,7 @@
 
 	<groupId>br.com.user</groupId>
 	<artifactId>user-services</artifactId>
-	<version>1.0.37</version>
+	<version>1.0.38</version>
 	<name>user-services</name>
 	<description>Microservico para gerenciar Usuarios</description>
 
@@ -19,11 +19,9 @@
 		<java.version>17</java.version>
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
-		<org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
 		<org.lombok.version>1.18.32</org.lombok.version>
 		<spring-cloud.version>2023.0.1</spring-cloud.version>
-		<spring-cloud-aws>3.1.0</spring-cloud-aws>
-		<springdoc-openapi-ui.version>1.6.7</springdoc-openapi-ui.version>
+		<awssdk.version>2.21.12</awssdk.version>
 	</properties>
 
 	<dependencies>
@@ -54,28 +52,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-contract-wiremock</artifactId>
-			<version>4.1.2</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
-		</dependency>
-
-		<dependency>
-			<groupId>org.mapstruct</groupId>
-			<artifactId>mapstruct</artifactId>
-			<version>${org.mapstruct.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok-mapstruct-binding</artifactId>
-			<version>0.2.0</version>
 		</dependency>
 
 		<!-- SWAGGER -->
@@ -94,23 +73,13 @@
 		</dependency>
 
 		<!-- OWASP -->
-		<dependency>
-			<groupId>com.googlecode.owasp-java-html-sanitizer</groupId>
-			<artifactId>owasp-java-html-sanitizer</artifactId>
-			<version>20240325.1</version>
-		</dependency>
 
-		<dependency>
-			<groupId>org.jsoup</groupId>
-			<artifactId>jsoup</artifactId>
-			<version>1.17.2</version>
-		</dependency>
 		<!-- OWASP -->
 
 		<dependency>
 			<groupId>com.br.azevedo</groupId>
 			<artifactId>commons-utils</artifactId>
-			<version>1.0.27102026011818</version>
+			<version>1.0.26112026171227</version>
 <!--			<version>1.0-SNAPSHOT</version>-->
 		</dependency>
 
@@ -126,6 +95,15 @@
 			<version>1.0.25102026072710</version>
 <!--			<version>1.0-SNAPSHOT</version>-->
 			<exclusions>
+				<!-- commons-security usa JJWT 0.11.x. -->
+				<exclusion>
+					<groupId>io.jsonwebtoken</groupId>
+					<artifactId>jjwt</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.br.azevedo</groupId>
+					<artifactId>commons-utils</artifactId>
+				</exclusion>
 				<exclusion>
 					<groupId>org.springframework.cloud</groupId>
 					<artifactId>spring-cloud-starter-vault-config</artifactId>
@@ -142,12 +120,35 @@
 			<artifactId>spring-security-crypto</artifactId>
 		</dependency>
 
+		<!-- O Spring inspeciona esses tipos em AWSInfraConfig ao iniciar. -->
 		<dependency>
-			<groupId>commons-codec</groupId>
-			<artifactId>commons-codec</artifactId>
-			<version>1.16.1</version>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>ssm</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>sns</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>secretsmanager</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>dynamodb</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.reflections</groupId>
+			<artifactId>reflections</artifactId>
+			<version>0.10.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>
@@ -161,9 +162,9 @@
 			</dependency>
 
 			<dependency>
-				<groupId>io.awspring.cloud</groupId>
-				<artifactId>spring-cloud-aws-dependencies</artifactId>
-				<version>${spring-cloud-aws}</version>
+				<groupId>software.amazon.awssdk</groupId>
+				<artifactId>bom</artifactId>
+				<version>${awssdk.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -187,16 +188,6 @@
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
 							<version>${org.lombok.version}</version>
-						</path>
-						<path>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok-mapstruct-binding</artifactId>
-							<version>0.2.0</version>
-						</path>
-						<path>
-							<groupId>org.mapstruct</groupId>
-							<artifactId>mapstruct-processor</artifactId>
-							<version>${org.mapstruct.version}</version>
 						</path>
 					</annotationProcessorPaths>
 				</configuration>

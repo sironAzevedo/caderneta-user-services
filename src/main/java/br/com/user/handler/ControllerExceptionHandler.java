@@ -31,7 +31,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(value = { InternalErrorException.class })
 	public com.br.azevedo.model.vo.StandardError internalError(RuntimeException e, HttpServletRequest request) {
-		return com.br.azevedo.model.vo.StandardError.builder(HttpStatus.NOT_FOUND.value(), e.getMessage(), new Date());
+		return com.br.azevedo.model.vo.StandardError.builder(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage(), new Date());
 	}
 
 	@ResponseBody
