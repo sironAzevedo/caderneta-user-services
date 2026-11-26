@@ -34,21 +34,10 @@ public class UserMapper {
     }
 
     public UserDTO toDTOLogin(User entity) {
-        if (entity == null) {
-            return null;
+        UserDTO dto = toDTO(entity);
+        if (dto != null) {
+            dto.setPassword(entity.getPassword());
         }
-        UserDTO dto = new UserDTO();
-        dto.setId(entity.getId());
-        dto.setName(entity.getName());
-        dto.setEmail(entity.getEmail());
-        dto.setPassword(entity.getPassword());
-        dto.setProvider(entity.getProvider());
-        dto.setProviderId(entity.getProviderId());
-        dto.setStatus(entity.getStatus());
-        dto.setPhoto(entity.getPhoto());
-        dto.setTermsAgreed(entity.getTermsAgreed());
-        dto.setPerfis(resolvePerfis(entity.getRoles()));
-        dto.setSistemas(entity.getSistemas() == null ? null : new HashSet<>(entity.getSistemas()));
         return dto;
     }
 

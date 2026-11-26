@@ -1,11 +1,14 @@
 package br.com.user;
 
 import br.com.user.model.User;
+import br.com.user.model.Role;
 import br.com.user.repository.IUserRepository;
+import br.com.user.repository.IRoleRepository;
 import br.com.user.service.CloudStorageProvider;
 import br.com.user.service.IUserService;
 import com.br.azevedo.model.dto.UserDTO;
 import com.br.azevedo.model.enums.SistemaEnum;
+import com.br.azevedo.model.enums.PerfilEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
 import java.util.Set;
+import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -52,6 +56,9 @@ class ApplicationTests {
 
     @Autowired
     private IUserRepository repository;
+
+    @Autowired
+    private IRoleRepository roles;
 
     @Autowired
     private PlatformTransactionManager transactions;
@@ -149,6 +156,18 @@ class ApplicationTests {
         assertThat(users.findByEmail(user.getEmail()).getPhotoUploaded()).isEqualTo(second.toString());
         var cachedProfile = caches.getCache("user_services_cliente_por_email").get(user.getEmail(), UserDTO.class);
         assertThat(cachedProfile.getPhotoUploaded()).isNull();
+    }
+
+    @Test
+    void returnsEachRoleOnceForUserEnrolledInTwoSystems() {
+        var role = new Role();
+        role.setName(PerfilEnum.ROLE_USER);
+        roles.save(role);
+        var user = repository.save(User.builder().name("Ciclano").email("roles@example.com")
+                .photo("avatar/known.jpg").roles(List.of(role))
+                .sistemas(Set.of(SistemaEnum.CADERNETA, SistemaEnum.MARKETPLACE)).build());
+
+        assertThat(users.login(user.getEmail()).getPerfis()).containsExactly(PerfilEnum.ROLE_USER);
     }
 
     @Test

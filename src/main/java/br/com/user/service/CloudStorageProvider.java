@@ -14,4 +14,10 @@ public interface CloudStorageProvider {
     void moveFile(String fromPath, String toPath);
     void removeFile(String filePath);
     DocumentoLinkInfoDTO isPresignedUrlExpired(String presignedUrl);
+
+    class FileLookupException extends RuntimeException {
+        public FileLookupException(Throwable cause) {
+            super("Não foi possível consultar o arquivo", cause);
+        }
+    }
 }

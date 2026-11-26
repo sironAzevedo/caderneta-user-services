@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import software.amazon.awssdk.core.exception.SdkException;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.HeadObjectRequest;
 import software.amazon.awssdk.services.s3.model.S3Exception;
@@ -64,11 +65,11 @@ public class S3CloudStorageProviderImpl implements CloudStorageProvider {
         try {
             s3Client.headObject(request);
             return true;
-        } catch (S3Exception exception) {
-            if (exception.statusCode() == 404) {
+        } catch (SdkException exception) {
+            if (exception instanceof S3Exception s3Error && s3Error.statusCode() == 404) {
                 return false;
             }
-            throw exception;
+            throw new FileLookupException(exception);
         }
     }
 

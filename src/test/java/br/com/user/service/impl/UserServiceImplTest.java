@@ -6,6 +6,7 @@ import br.com.user.model.dto.FileReference;
 import br.com.user.repository.IRoleRepository;
 import br.com.user.repository.IUserRepository;
 import br.com.user.service.CloudStorageProvider;
+import br.com.user.service.CloudStorageProvider.FileLookupException;
 import com.br.azevedo.exception.UserException;
 import com.br.azevedo.model.dto.UserDTO;
 import com.br.azevedo.model.enums.PerfilEnum;
@@ -181,9 +182,9 @@ class UserServiceImplTest {
                 .photo("avatar/avatar-blank.jpg").build();
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
         when(cloudStorageProvider.fileExists(anyString(), any(Duration.class))).thenThrow(
-                SdkClientException.create("S3 indisponível"));
+                new FileLookupException(SdkClientException.create("S3 indisponível")));
 
-        assertEquals(user.getPhoto(), userService.login(user.getEmail()).getPhoto());
+        assertEquals("https://test.invalid/avatar/avatar-blank.jpg", userService.login(user.getEmail()).getPhoto());
         verify(userRepository, never()).save(any());
     }
 
@@ -211,11 +212,19 @@ class UserServiceImplTest {
                 new UserProfiles(userRepository, events), events);
         ReflectionTestUtils.setField(users, "avatarBaseUrl", "https://test.invalid/");
 
-        assertEquals(user.getPhoto(), users.login(user.getEmail()).getPhoto());
+        assertEquals("https://test.invalid/avatar/avatar-blank.jpg", users.login(user.getEmail()).getPhoto());
 
         var request = ArgumentCaptor.forClass(HeadObjectRequest.class);
         verify(s3).headObject(request.capture());
         assertEquals(Duration.ofSeconds(2), request.getValue().overrideConfiguration()
                 .orElseThrow().apiCallTimeout().orElseThrow());
+    }
+    @Test
+    void usesConfiguredDefaultWhenStoredPlaceholderPointsToAnotherBucket() {
+        var user = User.builder().id(1L).name("Ciclano").email("config@example.com")
+                .photo("https://old.invalid/avatar/avatar-blank.jpg").build();
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
+
+        assertEquals("https://test.invalid/avatar/avatar-blank.jpg", userService.login(user.getEmail()).getPhoto());
     }
 }

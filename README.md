@@ -127,12 +127,12 @@ Cache
 - Caches configurados em `application.yml`:
   - `user_services_cliente_por_email` (ex.: TTL `${CACHE_DURATION_CONSULTA_PESSOA_EMAIL:PT72H}`)
   - `user_services_cliente_login_email` (ex.: TTL `${CACHE_DURATION_CONSULTA_LOGIN_EMAIL:PT72H}`)
-  - `user_services_cliente_por_id` (ex.: TTL `${CACHE_DURATION_CONSULTA_LOGIN_EMAIL:PT168H}`)
+  - `user_services_cliente_por_id` (ex.: TTL `${CACHE_DURATION_CONSULTA_PESSOA_ID:PT72H}`)
 - Métodos anotados com `@Cacheable`:
   - `findByEmail` → cache por e-mail
   - `findById` → cache por id
-  - `login` → cache por login e-mail
-- Invalidação: o `update` do usuário usa `@Caching(evict = {...})` para remover entradas por id e por email (tanto consulta padrão quanto login) quando um usuário é atualizado.
+  - `findForLogin` → cache de login por e-mail
+- Após o commit de uma alteração de usuário, o serviço invalida o cache por ID, e-mail e login. As URLs pré-assinadas de upload são geradas ao montar a resposta.
 
 Configuração (application.yml e variáveis de ambiente)
 ---------
@@ -223,7 +223,7 @@ Testes
 ```
 ./mvnw test
 ```
-- Há um profile `test` e arquivo `src/test/resources/application-test.properties` usado pelos testes.
+- `ApplicationTests` carrega o contexto com HikariCP e H2 em modo PostgreSQL. Os testes de fluxo usam armazenamento simulado e cache em memória.
 
 Logging e monitoramento
 ---------

@@ -2,6 +2,7 @@ package br.com.user.service.impl;
 
 import br.com.user.model.dto.DocumentoLinkInfoDTO;
 import br.com.user.model.dto.FileReference;
+import br.com.user.service.CloudStorageProvider.FileLookupException;
 import com.br.azevedo.infra.aws.s3.AwsS3StorageService;
 import com.br.azevedo.infra.aws.s3.PresignedUrlInfo;
 import org.junit.jupiter.api.BeforeEach;
@@ -131,7 +132,8 @@ class S3CloudStorageProviderImplTest {
     void shouldNotTreatS3FailureAsMissingObject() {
         var failure = S3Exception.builder().statusCode(503).build();
         when(s3Client.headObject(any(HeadObjectRequest.class))).thenThrow(failure);
-        assertThrows(S3Exception.class,
+        var error = assertThrows(FileLookupException.class,
                 () -> storageProvider.fileExists("avatar/avatar123.jpg"));
+        assertSame(failure, error.getCause());
     }
 }

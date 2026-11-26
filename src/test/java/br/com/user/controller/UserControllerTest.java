@@ -50,4 +50,20 @@ class UserControllerTest {
                         """)).andExpect(status().isOk());
         verify(service).update(eq("user@example.com"), any());
     }
+    @Test
+    void shouldRejectBlankGoogleName() throws Exception {
+        mvc.perform(post("/v1/user/google").contentType(APPLICATION_JSON).content("""
+                {"name":"   ","email":"user@example.com"}
+                """)).andExpect(status().isBadRequest());
+        verifyNoInteractions(service);
+    }
+
+    @Test
+    void shouldRejectPatchNameLongerThanDatabaseColumn() throws Exception {
+        mvc.perform(patch("/v1/user/user@example.com").contentType(APPLICATION_JSON)
+                .content("""
+                        {"name":"%s"}
+                        """.formatted("x".repeat(257)))).andExpect(status().isBadRequest());
+        verifyNoInteractions(service);
+    }
 }

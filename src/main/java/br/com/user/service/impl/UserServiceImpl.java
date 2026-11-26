@@ -8,6 +8,7 @@ import br.com.user.model.dto.FileReference;
 import br.com.user.repository.IRoleRepository;
 import br.com.user.repository.IUserRepository;
 import br.com.user.service.CloudStorageProvider;
+import br.com.user.service.CloudStorageProvider.FileLookupException;
 import br.com.user.service.IUserService;
 import com.br.azevedo.exception.UserException;
 import com.br.azevedo.model.dto.UserDTO;
@@ -24,7 +25,6 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import software.amazon.awssdk.core.exception.SdkException;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -200,7 +200,7 @@ public class UserServiceImpl implements IUserService {
 		if (!hasDefaultAvatar(user.getPhoto())) {
 			return user.getPhoto();
 		}
-		String fallback = StringUtils.defaultIfBlank(user.getPhoto(), defaultAvatar());
+		String fallback = defaultAvatar();
 		if (file == null) {
 			return fallback;
 		}
@@ -211,8 +211,8 @@ public class UserServiceImpl implements IUserService {
 			if (!exists) {
 				return fallback;
 			}
-		} catch (SdkException exception) {
-			log.warn("Falha ao consultar avatar do usuário {}: {}", user.getId(), exception.getClass().getSimpleName());
+		} catch (FileLookupException exception) {
+			log.warn("Falha ao consultar avatar do usuário {}: {}", user.getId(), exception.getCause().getClass().getSimpleName());
 			return fallback;
 		}
 
